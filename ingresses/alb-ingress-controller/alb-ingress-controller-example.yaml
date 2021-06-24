@@ -1,0 +1,55 @@
+---
+# For this ingresses to work, it should be deployed to the cluster the aws-load-balancer-controller
+# https://kubernetes-sigs.github.io/aws-load-balancer-controller/
+
+# This ingress creates and configures the ALB in AWS
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig":
+      { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-west-1:356003666994:certificate/de9fa0aa-1385-44c4-8867-e08a21ca3853
+    alb.ingress.kubernetes.io/group.name: external
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS":443}]'
+    alb.ingress.kubernetes.io/load-balancer-attributes: access_logs.s3.enabled=true,access_logs.s3.bucket=dop-eu-west-1-lb,access_logs.s3.prefix=sbx-k8s-ingress-external,routing.http.drop_invalid_header_fields.enabled=true
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/subnets: sbx_igw_1_a, sbx_igw_1_b, sbx_igw_1_c
+    alb.ingress.kubernetes.io/wafv2-acl-arn: arn:aws:wafv2:eu-west-1:356003666994:regional/webacl/sbx-k8s-alb-external/8e4d21dc-a9ed-4628-95c4-364bcf4fe069
+    kubernetes.io/ingress.class: alb
+  name: nginx-external
+  namespace: ingress-controllers
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: ssl-redirect
+          servicePort: use-annotation
+        path: /*
+        pathType: ImplementationSpecific
+
+---
+# This ingress creates a target group in the already created ALB that points to the IP of all k8s nodes to the NodePort where the backned service is listening
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/group.name: external
+    alb.ingress.kubernetes.io/healthcheck-path: /
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS":443}]'
+    alb.ingress.kubernetes.io/success-codes: "200"
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    kubernetes.io/ingress.class: alb
+  name: cert-test-tools
+  namespace: ingress-controllers
+spec:
+  rules:
+  - host: cert-test.sbx.test
+    http:
+      paths:
+      - backend:
+          serviceName: nginx-external
+          servicePort: 443
+        path: /*
+        pathType: ImplementationSpecific
