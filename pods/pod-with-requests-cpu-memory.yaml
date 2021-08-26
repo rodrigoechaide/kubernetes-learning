@@ -11,5 +11,8 @@ spec:
     name: pod1
     resources:
       requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
         cpu: 800m
         memory: 20Mi

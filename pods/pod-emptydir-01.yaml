@@ -18,6 +18,13 @@ spec:
         i=$((i+1));
         sleep 1;
       done
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
     volumeMounts:
     - name: varlog
       mountPath: /var/log

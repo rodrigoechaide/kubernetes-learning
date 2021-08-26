@@ -12,6 +12,13 @@ spec:
     ports:
     - containerPort: 27017
       protocol: TCP
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
   volumes:
   - name: mongodb-data
     persistentVolumeClaim:

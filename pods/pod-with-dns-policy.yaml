@@ -14,6 +14,13 @@ spec:
       - "3600"
     imagePullPolicy: IfNotPresent
     name: busybox
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
   dnsPolicy: Default
 ---
 apiVersion: v1
@@ -29,6 +36,13 @@ spec:
       - "3600"
     imagePullPolicy: IfNotPresent
     name: busybox
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
   dnsConfig:
     options:
       - name: single-request

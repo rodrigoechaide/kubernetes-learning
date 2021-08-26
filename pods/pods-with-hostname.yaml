@@ -27,6 +27,13 @@ spec:
       - sleep
       - "3600"
     name: busybox
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
 ---
 apiVersion: v1
 kind: Pod
@@ -43,6 +50,13 @@ spec:
       - sleep
       - "3600"
     name: busybox
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
 ---
 # Another example
 apiVersion: v1
@@ -60,3 +74,10 @@ spec:
       - sleep
       - "3600"
     name: busybox
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi

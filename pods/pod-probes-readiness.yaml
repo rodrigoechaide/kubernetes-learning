@@ -26,6 +26,13 @@ spec:
         port: 80
       initialDelaySeconds: 5
       periodSeconds: 5
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
 ---
 apiVersion: v1
 kind: Pod
@@ -43,3 +50,10 @@ spec:
         port: 80
       initialDelaySeconds: 5
       periodSeconds: 5
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi

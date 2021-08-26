@@ -7,6 +7,13 @@ spec:
   - name: app-container
     image: busybox
     command: ['sh', '-c', "echo $(MY_VAR) && sleep 3600"]
+    resources:
+      requests:
+        cpu: 300m
+        memory: 10Mi
+      limits:
+        cpu: 800m
+        memory: 20Mi
     volumeMounts:
       - name: configmapvolume
         mountPath: /etc/config
