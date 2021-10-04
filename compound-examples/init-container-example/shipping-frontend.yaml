@@ -1,0 +1,13 @@
+# This pod waits until the shipping-svc service is available
+apiVersion: v1
+kind: Pod
+metadata:
+  name: shipping-web
+spec:
+  containers:
+  - name: nginx
+    image: nginx:1.19.1
+  initContainers:
+  - name: wait-for-svc
+    image: busybox:1.27
+    command: ['sh', '-c', 'until nslookup shipping-svc; do echo waiting for shipping-svc; sleep 2; done']
