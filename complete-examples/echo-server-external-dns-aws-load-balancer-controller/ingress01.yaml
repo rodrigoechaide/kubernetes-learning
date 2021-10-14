@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    external-dns.alpha.kubernetes.io/hostname: echoserver.mycluster.example.org, echoserver.example.org
+    kubernetes.io/ingress.class: alb
+  name: echoserver
+spec:
+  rules:
+  - http:
+      paths:
+      - backend:
+          serviceName: echoserver
+          servicePort: 80
+        path: /
