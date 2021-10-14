@@ -1,0 +1,7 @@
+kind: ServiceAccount
+apiVersion: v1
+metadata:
+  name: aws-cli
+  namespace: default
+  annotations:
+    eks.amazonaws.com/role-arn: arn:aws:iam::052856279532:role/s3-read-only
