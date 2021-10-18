@@ -1,7 +1,7 @@
 ---
 # For this ingress to work, it should be deployed the nginx-ingress-controller
 # https://kubernetes.github.io/ingress-nginx/
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   namespace: tools
@@ -29,12 +29,15 @@ spec:
   - host: cert-test.sbx.alb.external.internal
     http:
       paths:
-      - backend:
-          serviceName: penetration
-          servicePort: 80
-        path: /
+      - path: /
         pathType: ImplementationSpecific
+        backend:
+          service:
+            name: penetration
+            port:
+              number: 80
   tls:
   - hosts:
     - cert-test.sbx.alb.external.internal
     secretName: cert-test-secret
+

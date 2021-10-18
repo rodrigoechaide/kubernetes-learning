@@ -1,4 +1,5 @@
----
+# extensions/v1beta1 is deprecated and this configuration is kept for reference purposes
+
 # For this ingresses to work, it should be deployed to the cluster the aws-load-balancer-controller
 # https://kubernetes-sigs.github.io/aws-load-balancer-controller/
 
