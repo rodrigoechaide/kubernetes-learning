@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deployment-emptydir
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: example-deployment
+  template:
+    metadata:
+      name: example-deployment
+      labels:
+        app: example-deployment
+    spec:
+      containers:
+      - name: busybox1
+        image: busybox:latest
+        command:
+        - 'sh'
+        - '-c'
+        - 'while true; do echo Success! >> /output/output.txt; sleep 5; done'
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "100Mi"
+          requests:
+            cpu: "20m"
+            memory: "20Mi"
+        volumeMounts:
+        - mountPath: /output
+          name: logdir
+      - name: busybox2
+        image: busybox:latest
+        command:
+        - /bin/sh
+        - -c
+        - >
+          while true;
+          do
+            cat /input/output.txt
+            sleep 5
+          done
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "100Mi"
+          requests:
+            cpu: "20m"
+            memory: "20Mi"
+        volumeMounts:
+        - mountPath: /input
+          name: logdir
+      volumes:
+      - name: logdir
+        emptyDir: {}

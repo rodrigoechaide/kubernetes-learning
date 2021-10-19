@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-deployment-hostpath
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: example-deployment
+  template:
+    metadata:
+      name: example-deployment
+      labels:
+        app: example-deployment
+    spec:
+      containers:
+      - env:
+        - name: app
+          value: "1"
+        image: busybox:latest
+        command: ["sh", "-c", "while true; do sleep 5; echo \"Hello World\" >> /data/output.txt; done"]
+        name: app
+        resources:
+          limits:
+            cpu: "200m"
+            memory: "100Mi"
+          requests:
+            cpu: "20m"
+            memory: "20Mi"
+        volumeMounts:
+        - mountPath: /data
+          name: volume-data
+      volumes:
+      - name: volume-data
+        hostPath:
+          path: /var/data
+          type: DirectoryOrCreate

@@ -22,7 +22,6 @@ spec:
       annotations:
         prometheus.io/port: "10254"
         prometheus.io/scrape: "true"
-      creationTimestamp: null
       labels:
         app: nginx-external
     spec:
