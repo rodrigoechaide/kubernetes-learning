@@ -33,8 +33,18 @@ spec:
       containers:
         - name: test
           image: busybox:latest
+          command: ["sh", "-c"]
           args:
-            ['sh', '-c', 'source /vault/secrets/config && printenv | sort && sleep 3600']
+          - >
+            source /vault/secrets/config &&
+            printenv |
+            sort &&
+            sleep 3600
+          # args: ['sh', '-c', 'source /vault/secrets/config && printenv | sort && sleep 3600']
+          # args:
+          #   - 'sh'
+          #   - '-c'
+          #   - 'source /vault/secrets/config && printenv | sort && sleep 3600'
           ports:
             - containerPort: 9090
           resources:
