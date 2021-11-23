@@ -3,5 +3,5 @@ kind: StorageClass
 metadata:
   name: local-storage
 allowVolumeExpansion: true
-reclaimPolicy: Delete
+reclaimPolicy: Recycled
 provisioner: kubernetes.io/no-provisioner

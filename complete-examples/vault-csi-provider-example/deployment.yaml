@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+  namespace: devops
+  labels:
+    app: demo
+spec:
+  selector:
+    matchLabels:
+      app: demo
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: demo
+    spec:
+      containers:
+        - name: app
+          image: busybox:latest
+          command: ["sh", "-c"]
+          args:
+            - "sleep 3600"
+          env:
+          - name: SECRET_USERNAME
+            valueFrom:
+              secretKeyRef:
+                name: vault-db-creds
+                key: username
+          - name: SECRET_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: vault-db-creds
+                key: password
+          volumeMounts:
+            - name: 'vault-db-creds'
+              mountPath: '/mnt/secrets-store'
+              readOnly: true
+          resources:
+            requests:
+              cpu: 300m
+              memory: 10Mi
+            limits:
+              cpu: 500m
+              memory: 20Mi
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            runAsUser: 10001
+            runAsGroup: 10001
+            capabilities:
+              drop:
+                - ALL
+      volumes:
+        - name: vault-db-creds
+          csi:
+            driver: 'secrets-store.csi.k8s.io'
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: 'vault-db-creds'
