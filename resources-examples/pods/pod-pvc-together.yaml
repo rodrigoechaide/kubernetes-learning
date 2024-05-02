@@ -1,0 +1,38 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  labels:
+    app: test-pvc-rechaide
+  name: test-pvc-rechaide
+  namespace: default
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+  storageClassName: gp3-encrypted
+  volumeMode: Filesystem
+  # volumeName: test-pvc-rechaide
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: aws-cli-rechaide-test
+  namespace: default
+spec:
+  containers:
+  - name: aws-cli
+    image: amazon/aws-cli
+    command: ["sleep", "infinity"]
+  # serviceAccountName: gmb
+    volumeMounts:
+    - name: test-pvc-rechaide
+      mountPath: /mnt/test-pvc-rechaide
+  volumes:
+  - name: test-pvc-rechaide
+    persistentVolumeClaim:
+      claimName: test-pvc-rechaide
+
+
